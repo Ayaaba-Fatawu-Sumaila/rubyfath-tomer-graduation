@@ -23,12 +23,32 @@
         
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url("https://raw.githubusercontent.com/Ayaaba-Fatawu-Sumaila/rubyfath-advice/main/photo_2025-06-04_20-42-15.jpg") no-repeat center center fixed;
-            background-size: cover;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
             color: var(--light);
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 1.5s ease-in-out;
+        }
+
+        /* Background slideshow */
+        .bg-slideshow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .bg-slideshow.active {
+            opacity: 1;
         }
 
         .container {
@@ -356,6 +376,20 @@
             color: white;
         }
 
+        .music-info {
+            position: fixed;
+            bottom: 25px;
+            left: 80px;
+            background: rgba(74, 20, 140, 0.9);
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            color: white;
+            z-index: 99;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
         footer {
             text-align: center;
             margin-top: 3rem;
@@ -560,6 +594,36 @@
             margin-top: 1rem;
         }
 
+        /* Medal display */
+        .medal-display {
+            font-size: 8rem;
+            margin: 1rem 0;
+            animation: medalSpin 2s ease-in-out;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.7));
+        }
+
+        .medal-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        @keyframes medalSpin {
+            0% {
+                transform: rotateY(0deg) scale(0.1);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateY(180deg) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: rotateY(360deg) scale(1);
+            }
+        }
+
         /* Responsive design */
         @media (max-width: 768px) {
             h1 {
@@ -587,6 +651,14 @@
             
             .celebration-message h3 {
                 font-size: 2rem;
+            }
+            
+            .medal-display {
+                font-size: 5rem;
+            }
+            
+            .medal-title {
+                font-size: 1.5rem;
             }
         }
 
@@ -729,6 +801,13 @@
     </style>
 </head>
 <body>
+    <!-- Background slideshow images -->
+    <div class="bg-slideshow active" id="bg-1"></div>
+    <div class="bg-slideshow" id="bg-2"></div>
+    <div class="bg-slideshow" id="bg-3"></div>
+    <div class="bg-slideshow" id="bg-4"></div>
+    <div class="bg-slideshow" id="bg-5"></div>
+
     <div class="container">
         <header>
             <div class="language-switcher">
@@ -796,12 +875,49 @@
         <i class="fas fa-music"></i>
     </div>
     
+    <div class="music-info" id="music-info">Background music playing</div>
+    
     <audio id="background-music" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Background images array
+            const bgImages = [
+                "https://raw.githubusercontent.com/Ayaaba-Fatawu-Sumaila/rubyfath-advice/main/tire_2025-06-05_11-27-52.jpg",
+                "https://raw.githubusercontent.com/Ayaaba-Fatawu-Sumaila/rubyfath-advice/main/bus_2025-06-05_11-28-06.jpg",
+                "https://raw.githubusercontent.com/Ayaaba-Fatawu-Sumaila/rubyfath-advice/main/din_2025-06-05_11-27-22.jpg",
+                "https://raw.githubusercontent.com/Ayaaba-Fatawu-Sumaila/rubyfath-advice/main/photo_2025-06-04_20-43-26.jpg",
+                "https://raw.githubusercontent.com/Ayaaba-Fatawu-Sumaila/rubyfath-advice/main/rubyfath_2025-06-05_12-41-06.jpg"
+            ];
+            
+            // Preload background images
+            bgImages.forEach((img, index) => {
+                const bgSlide = document.getElementById(`bg-${index + 1}`);
+                if (bgSlide) {
+                    bgSlide.style.backgroundImage = `url('${img}')`;
+                }
+            });
+            
+            // Start slideshow
+            let currentSlide = 0;
+            const slides = document.querySelectorAll('.bg-slideshow');
+            
+            function changeSlide() {
+                // Hide current slide
+                slides[currentSlide].classList.remove('active');
+                
+                // Move to next slide
+                currentSlide = (currentSlide + 1) % slides.length;
+                
+                // Show next slide
+                slides[currentSlide].classList.add('active');
+            }
+            
+            // Change slide every 6 seconds
+            setInterval(changeSlide, 6000);
+            
             // Translations
             const translations = {
                 en: {
@@ -814,313 +930,157 @@
                     connect: "Connect with RUBYFATH:",
                     score: "Score:",
                     questions: [
-            {
-                question: "I have black, I have white. I have a small tree. My family is crowded - 100 siblings on one branch.",
-                answer: "Grape",
-                hint: "It grows in bunches and makes wine",
-                possibleAnswers: ["grape", "grapes", "vine"]
-            },
-            {
-                question: "Follow my trail to find me, my house is on my back.",
-                answer: "Snail",
-                hint: "A slow-moving creature with a spiral shell",
-                possibleAnswers: ["snail", "escargot"]
-            },
-            {
-                question: "Green coat, yellow hair, dozens of eyes sleeping inside.",
-                answer: "Corn",
-                hint: "A popular summer vegetable often grilled",
-                possibleAnswers: ["corn", "maize", "ear of corn"]
-            },
-            {
-                question: "Resembles cotton but gives no warmth, flies in the sky without flapping wings.",
-                answer: "Snow",
-                hint: "Frozen precipitation that falls in winter",
-                possibleAnswers: ["snow", "snowflake"]
-            },
-            {
-                question: "I'm in the room, the room is in me.",
-                answer: "Mirror",
-                hint: "Reflective surface that shows your image",
-                possibleAnswers: ["mirror", "looking glass"]
-            },
-            {
-                question: "I have two windows surrounded by flesh; I close at night and open by day.",
-                answer: "Eye",
-                hint: "Visual organ that allows you to see",
-                possibleAnswers: ["eye", "eyes"]
-            },
-            {
-                question: "Comes sweet to the mouth, leaves full but returns empty.",
-                answer: "Spoon",
-                hint: "Eating utensil used for soups and desserts",
-                possibleAnswers: ["spoon", "tablespoon"]
-            },
-            {
-                question: "Smoke rises from it, it can depart, not a fish but swims in the sea.",
-                answer: "Ship",
-                hint: "Large water vessel for transportation",
-                possibleAnswers: ["ship", "boat", "vessel"]
-            },
-            {
-                question: "My gift is sweet, my weapon stings, my name is pure. Who am I?",
-                answer: "Bee",
-                hint: "Flying insect that produces honey",
-                possibleAnswers: ["bee", "honeybee"]
-            },
-            {
-                question: "Cooked it becomes food, uncooked it becomes a bird.",
-                answer: "Egg",
-                hint: "Breakfast food that comes from chickens",
-                possibleAnswers: ["egg", "eggs"]
-            },
-            {
-                question: "I have a home but no address, no possessions inside, I carry my whole world without complaint.",
-                answer: "Turtle",
-                hint: "Reptile that carries its home on its back",
-                possibleAnswers: ["turtle", "tortoise"]
-            },
-            {
-                question: "Cut me in half and I become nothing. Turn me sideways and I become infinite.",
-                answer: "8",
-                hint: "A numerical digit with special symmetry",
-                possibleAnswers: ["eight", "8", "number eight"]
-            },
-            {
-                question: "It has a tail but isn't alive, it speaks but isn't human, it has a screen but isn't a window.",
-                answer: "Television",
-                hint: "Electronic device for entertainment",
-                possibleAnswers: ["television", "tv", "set"]
-            },
-            {
-                question: "It eats everything I give it, but dies if I give it water.",
-                answer: "Fire",
-                hint: "Element that produces heat and light",
-                possibleAnswers: ["fire", "flame"]
-            },
-            {
-                question: "Has an outside but no inside, gets beaten without guilt.",
-                answer: "Ball",
-                hint: "Round object used in sports",
-                possibleAnswers: ["ball", "soccer ball", "football"]
-            },
-            {
-                question: "As large as a mountain but light as a leaf.",
-                answer: "Cloud",
-                hint: "Floating atmospheric formation",
-                possibleAnswers: ["cloud", "clouds"]
-            },
-            {
-                question: "Lighter than a feather, but the strongest person can't hold it for long.",
-                answer: "Breath",
-                hint: "Essential life function",
-                possibleAnswers: ["breath", "air"]
-            },
-            {
-                question: "Green in the field, black in the market, red in the cup. Loved by all generations.",
-                answer: "Tea",
-                hint: "Popular hot beverage",
-                possibleAnswers: ["tea", "black tea"]
-            },
-            {
-                question: "An arch of colors that can't shoot arrows, follows rain but avoids snow.",
-                answer: "Rainbow",
-                hint: "Meteorological phenomenon with seven colors",
-                possibleAnswers: ["rainbow"]
-            },
-            {
-                question: "Four legs but no life, cut its leg and it won't bleed.",
-                answer: "Table",
-                hint: "Furniture piece for dining",
-                possibleAnswers: ["table", "desk"]
-            },
-            {
-                question: "What blanket can't be spread on a table?",
-                answer: "Vegetation",
-                hint: "Plant life covering the earth's surface",
-                possibleAnswers: ["vegetation", "plants", "foliage"]
-            },
-            {
-                question: "What gets served but never eaten?",
-                answer: "Tennis ball",
-                hint: "Sports equipment used in racket games",
-                possibleAnswers: ["tennis ball", "ball"]
-            },
-            {
-                question: "What is the fastest thing to be consumed?",
-                answer: "Salary",
-                hint: "Payment received for work",
-                possibleAnswers: ["salary", "wage", "paycheck"]
-            },
-            {
-                question: "What village is everyone afraid to go to?",
-                answer: "Wooden village",
-                hint: "Final resting place metaphor",
-                possibleAnswers: ["wooden village", "graveyard"]
-            },
-            {
-                question: "What insect is the cleanest?",
-                answer: "Cockroach",
-                hint: "Known for frequent bathing behavior",
-                possibleAnswers: ["cockroach", "roach"]
-            }
-            ],
-        // ... keep existing congrats messages ...
-         },
-    tr: {
-        // ... other existing translations ...
-        questions: [
-        {
-            question: "Karam var, beyazım var. Küçük bir ağacım var. Ailem kalabalıktır. Bir dalda 100 kardeşim var.",
-            answer: "Üzüm",
-            hint: "Salkımlar halinde yetişir ve şarap yapılır",
-            possibleAnswers: ["üzüm", "salkım"]
-        },
-        {
-            question: "İzimi takip et, beni bulursun. Evimi sırtımda görürsün.",
-            answer: "Salyangoz",
-            hint: "Kabuğunu sırtında taşıyan yavaş hareket eden canlı",
-            possibleAnswers: ["salyangoz", "sümüklü böcek"]
-        },
-        {
-            question: "Yeşil elbisem, sarı saçım. İçeride uyuyor onlarca gözüm.",
-            answer: "Mısır",
-            hint: "Yazın sıklıkla ızgara yapılan sebze",
-            possibleAnswers: ["mısır", "koçan"]
-        },
-        {
-            question: "Pamuğa benzer, sıcak tutmaz. Gökte uçar, kanat çırpmaz.",
-            answer: "Kar",
-            hint: "Kışın yağan donmuş yağış",
-            possibleAnswers: ["kar", "kar tanesi"]
-        },
-        {
-            question: "Ben odanın içindeyim, Oda benim içimde.",
-            answer: "Ayna",
-            hint: "Yansıma yapan yüzey",
-            possibleAnswers: ["ayna"]
-        },
-        {
-            question: "Benim iki pencerem var, etrafı etten duvar; gece olur kaparım, gündüz olur açarım.",
-            answer: "Göz",
-            hint: "Görmenizi sağlayan organ",
-            possibleAnswers: ["göz", "gözler"]
-        },
-        {
-            question: "Ağzımıza hoş gelir, dolu gider boş gelir.",
-            answer: "Kaşık",
-            hint: "Çorba ve tatlılar için kullanılan yemek gereci",
-            possibleAnswers: ["kaşık"]
-        },
-        {
-            question: "Dumanı tüter, isterse gider, balık değildir, denizde yüzer.",
-            answer: "Vapur",
-            hint: "Ulaşım için kullanılan büyük su aracı",
-            possibleAnswers: ["vapur", "gemi"]
-        },
-        {
-            question: "Tatlıdır armağanım, pek acıtır silahım, temizdir benim adım, ben kimim söyle canım?",
-            answer: "Arı",
-            hint: "Bal üreten uçan böcek",
-            possibleAnswers: ["arı", "bal arısı"]
-        },
-        {
-            question: "Pişirirsen aş olur, pişirmezsen kuş olur.",
-            answer: "Yumurta",
-            hint: "Tavuklardan gelen kahvaltılık",
-            possibleAnswers: ["yumurta"]
-        },
-        {
-            question: "Evim var, adresim yok. Evimde eşyam yok. Sırtımda bütün yüküm, Bundan şikayetim yok.",
-            answer: "Kaplumbağa",
-            hint: "Evi sırtında olan sürüngen",
-            possibleAnswers: ["kaplumbağa", "tosbağa"]
-        },
-        {
-            question: "Beni ortadan kesersen hiç olurum. Yan çevirirsen sonsuz olurum.",
-            answer: "8",
-            hint: "Özel simetriye sahip sayı",
-            possibleAnswers: ["sekiz", "8"]
-        },
-        {
-            question: "Kuyruğu var canlı değil, konuşur ama insan değil, camı var ama pencere değil.",
-            answer: "Televizyon",
-            hint: "Eğlence için kullanılan elektronik cihaz",
-            possibleAnswers: ["televizyon", "tv"]
-        },
-        {
-            question: "Ne versem yer, su verirsem ölür.",
-            answer: "Ateş",
-            hint: "Isı ve ışık üreten element",
-            possibleAnswers: ["ateş", "alev"]
-        },
-        {
-            question: "Dışı var içi yok, dayak yer suçu yok.",
-            answer: "Top",
-            hint: "Sporlarda kullanılan yuvarlak nesne",
-            possibleAnswers: ["top", "futbol topu"]
-        },
-        {
-            question: "Dağ kadar büyük, yaprak kadar hafif.",
-            answer: "Bulut",
-            hint: "Atmosferde yüzen oluşum",
-            possibleAnswers: ["bulut", "bulutlar"]
-        },
-        {
-            question: "Tüyden daha hafiftir ama dünyanın en güçlü insanı bile uzun süre tutamaz.",
-            answer: "Nefes",
-            hint: "Temel yaşam fonksiyonu",
-            possibleAnswers: ["nefes", "hava"]
-        },
-        {
-            question: "Tarlada yeşilim, markette siyah. Bardakta kırmızıyım, bazen de yeşil. Beni herkes çok sever. Fark etmez hiçbir nesil.",
-            answer: "Çay",
-            hint: "Popüler sıcak içecek",
-            possibleAnswers: ["çay", "siyah çay"]
-        },
-        {
-            question: "Renklerden bir yay, ama onunla ok atılmaz. Yağmurun peşine takılır, kara takılmaz.",
-            answer: "Gökkuşağı",
-            hint: "Yedi renkli meteorolojik fenomen",
-            possibleAnswers: ["gökkuşağı"]
-        },
-        {
-            question: "Dört ayağı var canı yok, ayağını kessen kanı yok.",
-            answer: "Masa",
-            hint: "Yemek yemek için kullanılan mobilya",
-            possibleAnswers: ["masa", "sehpa"]
-        },
-        {
-            question: "Masaya hangi örtü serilmez?",
-            answer: "Bitki örtüsü",
-            hint: "Dünya yüzeyini kaplayan bitki örtüsü",
-            possibleAnswers: ["bitki örtüsü", "vejetasyon"]
-        },
-        {
-            question: "Servis edilse de yenemeyen şey nedir?",
-            answer: "Tenis topu",
-            hint: "Raket oyunlarında kullanılan spor ekipmanı",
-            possibleAnswers: ["tenis topu", "top"]
-        },
-        {
-            question: "En hızlı yenilen şey nedir?",
-            answer: "Maaş",
-            hint: "İş karşılığı alınan ödeme",
-            possibleAnswers: ["maaş", "aylık", "ücret"]
-        },
-        {
-            question: "Herkesin gitmekten korktuğu köy hangisidir?",
-            answer: "Tahtalıköy",
-            hint: "Nihai istirahatgah metaforu",
-            possibleAnswers: ["tahtalıköy", "mezarlık"]
-        },
-        {
-            question: "En temiz böcek hangi böcektir?",
-            answer: "Hamamböceği",
-            hint: "Sık sık yıkanma davranışıyla bilinir",
-            possibleAnswers: ["hamamböceği"]
-        }
-        ],
+                        {
+                            question: "I have black, I have white. I have a small tree. My family is crowded - 100 siblings on one branch.",
+                            answer: "Grape",
+                            hint: "It grows in bunches and makes wine",
+                            possibleAnswers: ["grape", "grapes", "vine"]
+                        },
+                        {
+                            question: "Follow my trail to find me, my house is on my back.",
+                            answer: "Snail",
+                            hint: "A slow-moving creature with a spiral shell",
+                            possibleAnswers: ["snail", "escargot"]
+                        },
+                        {
+                            question: "Green coat, yellow hair, dozens of eyes sleeping inside.",
+                            answer: "Corn",
+                            hint: "A popular summer vegetable often grilled",
+                            possibleAnswers: ["corn", "maize", "ear of corn"]
+                        },
+                        {
+                            question: "Resembles cotton but gives no warmth, flies in the sky without flapping wings.",
+                            answer: "Snow",
+                            hint: "Frozen precipitation that falls in winter",
+                            possibleAnswers: ["snow", "snowflake"]
+                        },
+                        {
+                            question: "I'm in the room, the room is in me.",
+                            answer: "Mirror",
+                            hint: "Reflective surface that shows your image",
+                            possibleAnswers: ["mirror", "looking glass"]
+                        },
+                        {
+                            question: "I have two windows surrounded by flesh; I close at night and open by day.",
+                            answer: "Eye",
+                            hint: "Visual organ that allows you to see",
+                            possibleAnswers: ["eye", "eyes"]
+                        },
+                        {
+                            question: "Comes sweet to the mouth, leaves full but returns empty.",
+                            answer: "Spoon",
+                            hint: "Eating utensil used for soups and desserts",
+                            possibleAnswers: ["spoon", "tablespoon"]
+                        },
+                        {
+                            question: "Smoke rises from it, it can depart, not a fish but swims in the sea.",
+                            answer: "Ship",
+                            hint: "Large water vessel for transportation",
+                            possibleAnswers: ["ship", "boat", "vessel"]
+                        },
+                        {
+                            question: "My gift is sweet, my weapon stings, my name is pure. Who am I?",
+                            answer: "Bee",
+                            hint: "Flying insect that produces honey",
+                            possibleAnswers: ["bee", "honeybee"]
+                        },
+                        {
+                            question: "Cooked it becomes food, uncooked it becomes a bird.",
+                            answer: "Egg",
+                            hint: "Breakfast food that comes from chickens",
+                            possibleAnswers: ["egg", "eggs"]
+                        },
+                        {
+                            question: "I have a home but no address, no possessions inside, I carry my whole world without complaint.",
+                            answer: "Turtle",
+                            hint: "Reptile that carries its home on its back",
+                            possibleAnswers: ["turtle", "tortoise"]
+                        },
+                        {
+                            question: "Cut me in half and I become nothing. Turn me sideways and I become infinite.",
+                            answer: "8",
+                            hint: "A numerical digit with special symmetry",
+                            possibleAnswers: ["eight", "8", "number eight"]
+                        },
+                        {
+                            question: "It has a tail but isn't alive, it speaks but isn't human, it has a screen but isn't a window.",
+                            answer: "Television",
+                            hint: "Electronic device for entertainment",
+                            possibleAnswers: ["television", "tv", "set"]
+                        },
+                        {
+                            question: "It eats everything I give it, but dies if I give it water.",
+                            answer: "Fire",
+                            hint: "Element that produces heat and light",
+                            possibleAnswers: ["fire", "flame"]
+                        },
+                        {
+                            question: "Has an outside but no inside, gets beaten without guilt.",
+                            answer: "Ball",
+                            hint: "Round object used in sports",
+                            possibleAnswers: ["ball", "soccer ball", "football"]
+                        },
+                        {
+                            question: "As large as a mountain but light as a leaf.",
+                            answer: "Cloud",
+                            hint: "Floating atmospheric formation",
+                            possibleAnswers: ["cloud", "clouds"]
+                        },
+                        {
+                            question: "Lighter than a feather, but the strongest person can't hold it for long.",
+                            answer: "Breath",
+                            hint: "Essential life function",
+                            possibleAnswers: ["breath", "air"]
+                        },
+                        {
+                            question: "Green in the field, black in the market, red in the cup. Loved by all generations.",
+                            answer: "Tea",
+                            hint: "Popular hot beverage",
+                            possibleAnswers: ["tea", "black tea"]
+                        },
+                        {
+                            question: "An arch of colors that can't shoot arrows, follows rain but avoids snow.",
+                            answer: "Rainbow",
+                            hint: "Meteorological phenomenon with seven colors",
+                            possibleAnswers: ["rainbow"]
+                        },
+                        {
+                            question: "Four legs but no life, cut its leg and it won't bleed.",
+                            answer: "Table",
+                            hint: "Furniture piece for dining",
+                            possibleAnswers: ["table", "desk"]
+                        },
+                        {
+                            question: "What blanket can't be spread on a table?",
+                            answer: "Vegetation",
+                            hint: "Plant life covering the earth's surface",
+                            possibleAnswers: ["vegetation", "plants", "foliage"]
+                        },
+                        {
+                            question: "What gets served but never eaten?",
+                            answer: "Tennis ball",
+                            hint: "Sports equipment used in racket games",
+                            possibleAnswers: ["tennis ball", "ball"]
+                        },
+                        {
+                            question: "What is the fastest thing to be consumed?",
+                            answer: "Salary",
+                            hint: "Payment received for work",
+                            possibleAnswers: ["salary", "wage", "paycheck"]
+                        },
+                        {
+                            question: "What village is everyone afraid to go to?",
+                            answer: "Wooden village",
+                            hint: "Final resting place metaphor",
+                            possibleAnswers: ["wooden village", "graveyard"]
+                        },
+                        {
+                            question: "What insect is the cleanest?",
+                            answer: "Cockroach",
+                            hint: "Known for frequent bathing behavior",
+                            possibleAnswers: ["cockroach", "roach"]
+                        }
+                    ],
                     congrats: [
                         "You did great! Keep learning and growing!",
                         "Impressive knowledge! You're a true scholar!",
@@ -1138,47 +1098,155 @@
                     connect: "RUBYFATH ile iletişim:",
                     score: "Puan:",
                     questions: [
-                        {
-                            question: "Üniversitemizin resmi rengi nedir?",
-                            answer: "Mor",
-                            hint: "Genellikle kraliyetle ilişkilendirilen bir renk",
-                            possibleAnswers: ["mor", "erguvan"]
+                     {
+                            question: "Siyahım var, beyazım var. Küçük bir ağacım var. Ailem kalabalık - bir dalda 100 kardeş.",
+                            answer: "Üzüm",
+                            hint: "Salkımlar halinde büyür ve şarap yapılır",
+                            possibleAnswers: ["üzüm", "salkım"]
                         },
                         {
-                            question: "Fakültemizin dekanı kimdir?",
-                            answer: "Yasmin",
-                            hint: "Soyadı yaygın bir İngiliz soyadıdır",
-                            possibleAnswers: ["dr. Yasmin", "Yasmin", "dr Yasmin"]
+                            question: "Beni bulmak için izimi takip et, evim sırtımda.",
+                            answer: "Salyangoz",
+                            hint: "Sarmal kabuğu olan yavaş hareket eden bir yaratık",
+                            possibleAnswers: ["salyangoz"]
                         },
                         {
-                            question: "Üniversite maskotumuzun adı nedir?",
-                            answer: "Gök Gürültüsü",
-                            hint: "Güçlü bir doğa olayıdır",
-                            possibleAnswers: ["gök gürültüsü", "gök gürlemesi", "thunder"]
+                            question: "Yeşil ceket, sarı saç, içinde uyuyan düzinelerce göz.",
+                            answer: "Mısır",
+                            hint: "Genellikle ızgara yapılan popüler bir yaz sebzesi",
+                            possibleAnswers: ["mısır", "koçan"]
                         },
                         {
-                            question: "Üniversitemizin sloganı nedir?",
-                            answer: "Bilgi Güçtür",
-                            hint: "Francis Bacon'ın ünlü bir sözüdür",
-                            possibleAnswers: ["bilgi güçtür", "bilgi kuvvettir", "scientia potentia est"]
+                            question: "Pamuğa benzer ama ısıtmaz, kanat çırpmadan gökyüzünde uçar.",
+                            answer: "Kar",
+                            hint: "Kışın düşen donmuş yağış",
+                            possibleAnswers: ["kar", "kar tanesi"]
                         },
                         {
-                            question: "Mezuniyet töreni geleneksel olarak hangi ayda yapılır?",
-                            answer: "Haziran",
-                            hint: "Yazın ilk ayıdır",
-                            possibleAnswers: ["haziran", "haz"]
+                            question: "Ben odadayım, oda benim içimde.",
+                            answer: "Ayna",
+                            hint: "Görüntünüzü gösteren yansıtıcı yüzey",
+                            possibleAnswers: ["ayna"]
                         },
                         {
-                            question: "Uygulama geliştiricisinin adı nedir?",
-                            answer: "Rubyfath",
-                            hint: "Uygulamada bulunabilir",
-                            possibleAnswers: ["Fath", "rubyfath", "ayaaba"]
+                            question: "Eti kuşatan iki pencerem var; gece kapanır, gündüz açılır.",
+                            answer: "Göz",
+                            hint: "Görmenizi sağlayan görsel organ",
+                            possibleAnswers: ["göz", "gözler"]
                         },
                         {
-                            question: "Uygulama geliştiricisinin soyadı nedir?",
-                            answer: "Ayaaba",
-                            hint: "'A' ile başlar ve yaygın bir Gana ismidir",
-                            possibleAnswers: ["Fath", "rubyfath", "ayaaba"]
+                            question: "Ağza tatlı gelir, dolu bırakır ama boş döner.",
+                            answer: "Kaşık",
+                            hint: "Çorba ve tatlılar için kullanılan yemek gereci",
+                            possibleAnswers: ["kaşık", "yemek kaşığı"]
+                        },
+                        {
+                            question: "Ondan duman yükselir, ayrılabilir, balık değildir ama denizde yüzer.",
+                            answer: "Gemi",
+                            hint: "Ulaşım için büyük su gemisi",
+                            possibleAnswers: ["gemi", "tekne", "vapur"]
+                        },
+                        {
+                            question: "Hediyem tatlıdır, silahım acıtır, adım safdır. Ben kimim?",
+                            answer: "Arı",
+                            hint: "Bal üreten uçan böcek",
+                            possibleAnswers: ["arı", "bal arısı"]
+                        },
+                        {
+                            question: "Pişirilirse yemek olur, pişmemiş hali bir kuştur.",
+                            answer: "Yumurta",
+                            hint: "Tavuklardan gelen bir kahvaltı yiyeceği",
+                            possibleAnswers: ["yumurta", "yumurtalar"]
+                        },
+                        {
+                            question: "Bir evim var ama adresim yok, içinde hiç eşya yok, tüm dünyamı şikayet etmeden taşırım.",
+                            answer: "Kaplumbağa",
+                            hint: "Evini sırtında taşıyan sürüngen",
+                            possibleAnswers: ["kaplumbağa", "tosbağa"]
+                        },
+                        {
+                            question: "Beni ikiye bölersen hiç olurum. Yan çevirirsem sonsuz olurum.",
+                            answer: "8",
+                            hint: "Özel simetriye sahip sayısal bir rakam",
+                            possibleAnswers: ["sekiz", "8"]
+                        },
+                        {
+                            question: "Kuyruğu var ama canlı değildir, konuşur ama insan değildir, ekranı vardır ama pencere değildir.",
+                            answer: "Televizyon",
+                            hint: "Eğlence için elektronik cihaz",
+                            possibleAnswers: ["televizyon", "tv"]
+                        },
+                        {
+                            question: "Ona verdiğim her şeyi yer, ama su verirsem ölür.",
+                            answer: "Ateş",
+                            hint: "Isı ve ışık üreten element",
+                            possibleAnswers: ["ateş", "alev"]
+                        },
+                        {
+                            question: "Dışı var ama içi yok, suçsuz yere dövülür.",
+                            answer: "Top",
+                            hint: "Sporlarda kullanılan yuvarlak nesne",
+                            possibleAnswers: ["top", "futbol topu"]
+                        },
+                        {
+                            question: "Bir dağ kadar büyük ama bir yaprak kadar hafif.",
+                            answer: "Bulut",
+                            hint: "Gökyüzünde yüzen atmosferik oluşum",
+                            possibleAnswers: ["bulut", "bulutlar"]
+                        },
+                        {
+                            question: "Bir tüyden hafif, ama en güçlü insan bile onu uzun süre tutamaz.",
+                            answer: "Nefes",
+                            hint: "Temel yaşam fonksiyonu",
+                            possibleAnswers: ["nefes", "hava"]
+                        },
+                        {
+                            question: "Tarlada yeşil, pazarda siyah, bardakta kırmızı. Tüm nesiller tarafından sevilir.",
+                            answer: "Çay",
+                            hint: "Popüler sıcak içecek",
+                            possibleAnswers: ["çay", "siyah çay"]
+                        },
+                        {
+                            question: "Ok atamayan bir renk kemeri, yağmuru takip eder ama kardan kaçar.",
+                            answer: "Gökkuşağı",
+                            hint: "Yedi renkli meteorolojik fenomen",
+                            possibleAnswers: ["gökkuşağı"]
+                        },
+                        {
+                            question: "Dört bacağı var ama canı yok, bacağını kesersen kanamaz.",
+                            answer: "Masa",
+                            hint: "Yemek için mobilya parçası",
+                            possibleAnswers: ["masa", "çalışma masası"]
+                        },
+                        {
+                            question: "Hangi battaniye masaya serilemez?",
+                            answer: "Bitki Örtüsü",
+                            hint: "Dünya yüzeyini kaplayan bitki yaşamı",
+                            possibleAnswers: ["bitki örtüsü", "bitkiler", "yeşillik"]
+                        },
+                        {
+                            question: "Asla yenmeyen ama servis edilen nedir?",
+                            answer: "Tenis Topu",
+                            hint: "Raket oyunlarında kullanılan spor ekipmanı",
+                            possibleAnswers: ["tenis topu", "top"]
+                        },
+                        {
+                            question: "Tüketilen en hızlı şey nedir?",
+                            answer: "Maaş",
+                            hint: "İş karşılığı alınan ödeme",
+                            possibleAnswers: ["maaş", "ücret", "maaş çeki"]
+                        },
+                        {
+                            question: "Herkesin gitmeye korktuğu köy hangisidir?",
+                            answer: "Tahta Köy",
+                            hint: "Nihai dinlenme yeri metaforu",
+                            possibleAnswers: ["tahta köy", "mezarlık"]
+                        },
+                        {
+                            question: "En temiz böcek hangisidir?",
+                            answer: "Hamam Böceği",
+                            hint: "Sık sık banyo yapma davranışıyla bilinir",
+                            possibleAnswers: ["hamam böceği"]
                         }
                     ],
                     congrats: [
@@ -1211,6 +1279,7 @@
             const progressBar = document.getElementById('progress-bar');
             const musicControl = document.getElementById('music-control');
             const backgroundMusic = document.getElementById('background-music');
+            const musicInfo = document.getElementById('music-info');
             const langButtons = document.querySelectorAll('.lang-btn');
             
             // Text elements
@@ -1301,9 +1370,9 @@
                 
                 // Check the answer
                 if (isCorrect) {
-                    gameState.score += 10;
+                    gameState.score += 4;
                     showResult(`🎉 ${translations[gameState.language].submitBtn === "Submit Answer" ? 
-                        "Correct! The answer is" : "Doğru! Cevap"} ${currentQ.answer}. +10 ${translations[gameState.language].score === "Score:" ? "points!" : "puan!"}`, "success");
+                        "Correct! The answer is" : "Doğru! Cevap"} ${currentQ.answer}. +4 ${translations[gameState.language].score === "Score:" ? "points!" : "puan!"}`, "success");
                     createConfetti();
                     createCelebrationEmoji('🌟', submitBtn);
                     createBalloons(5); // Add some balloons for correct answer
@@ -1461,11 +1530,18 @@
                 if (gameState.musicPlaying) {
                     backgroundMusic.pause();
                     musicControl.innerHTML = '<i class="fas fa-music"></i>';
+                    musicInfo.style.display = 'none';
                     gameState.musicPlaying = false;
                 } else {
                     backgroundMusic.play();
                     musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+                    musicInfo.style.display = 'block';
                     gameState.musicPlaying = true;
+                    
+                    // Hide music info after 3 seconds
+                    setTimeout(() => {
+                        musicInfo.style.display = 'none';
+                    }, 3000);
                 }
                 musicControl.classList.add('pop-animation');
                 setTimeout(() => {
@@ -1507,19 +1583,33 @@
                 // Hide game container
                 document.querySelector('.game-container').style.display = 'none';
                 
-                // Determine message based on score
-                let messageIndex = Math.floor(gameState.score / 30);
-                if (messageIndex > 3) messageIndex = 3;
+                // Determine medal based on score
+                let medalEmoji = '';
+                let medalTitle = '';
                 
-                const message = translations[gameState.language].congrats[messageIndex];
+                if (gameState.score <= 30) {
+                    medalEmoji = '🥉';
+                    medalTitle = translations[gameState.language].score === "Score:" ? "Bronze Medal" : "Bronz Madalya";
+                } else if (gameState.score <= 50) {
+                    medalEmoji = '🥈';
+                    medalTitle = translations[gameState.language].score === "Score:" ? "Silver Medal" : "Gümüş Madalya";
+                } else if (gameState.score <= 70) {
+                    medalEmoji = '🥇';
+                    medalTitle = translations[gameState.language].score === "Score:" ? "Gold Medal" : "Altın Madalya";
+                } else {
+                    medalEmoji = '🏆';
+                    medalTitle = translations[gameState.language].score === "Score:" ? "Platinum Trophy" : "Platin Kupa";
+                }
                 
                 // Create celebration message
                 const congratsDiv = document.createElement('div');
                 congratsDiv.className = 'celebration-message';
                 congratsDiv.innerHTML = `
                     <h3>${gameState.language === 'en' ? 'Congratulations!' : 'Tebrikler!'}</h3>
-                    <p>${message}</p>
-                    <p>${gameState.language === 'en' ? 'Your final score:' : 'Son puanınız:'} <strong>${gameState.score}/70</strong></p>
+                    <div class="medal-display">${medalEmoji}</div>
+                    <div class="medal-title">${medalTitle}</div>
+                    <p>${translations[gameState.language].score === "Score:" ? 'Your final score:' : 'Son puanınız:'} <strong>${gameState.score}/70</strong></p>
+                    <p>${gameState.language === 'en' ? 'You have earned this honor!' : 'Bu şerefi hak ettiniz!'}</p>
                     <button id="play-again">${gameState.language === 'en' ? 'Play Again' : 'Tekrar Oyna'}</button>
                 `;
                 
