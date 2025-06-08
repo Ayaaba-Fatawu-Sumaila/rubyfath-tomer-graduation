@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İKÇÜ TÖMER Graduation Celebration 2025</title>
+    <title>İKÇÜ TÖMER Mezuniyet Kutlaması 2025</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
@@ -610,20 +610,6 @@
             letter-spacing: 2px;
         }
 
-        @keyframes medalSpin {
-            0% {
-                transform: rotateY(0deg) scale(0.1);
-                opacity: 0;
-            }
-            50% {
-                transform: rotateY(180deg) scale(1.5);
-                opacity: 1;
-            }
-            100% {
-                transform: rotateY(360deg) scale(1);
-            }
-        }
-
         /* Responsive design */
         @media (max-width: 768px) {
             h1 {
@@ -811,30 +797,30 @@
     <div class="container">
         <header>
             <div class="language-switcher">
-                <button class="lang-btn active" data-lang="en">English</button>
-                <button class="lang-btn" data-lang="tr">Türkçe</button>
+                <button class="lang-btn" data-lang="en">English</button>
+                <button class="lang-btn active" data-lang="tr">Türkçe</button>
             </div>
             
             <div class="graduation-cap" id="grad-cap">🎓</div>
-            <h1 id="title">İKÇÜ TÖMER Class of 2025 Graduation</h1>
-            <h2 id="subtitle">Celebrating Your Achievements</h2>
+            <h1 id="title">İKÇÜ TÖMER 2025 Mezuniyeti</h1>
+            <h2 id="subtitle">Başarılarınızı Kutluyoruz</h2>
         </header>
 
         <div class="main-content">
             <div class="game-container">
-                <h3 class="game-title" id="quiz-title">Graduation Quiz Challenge</h3>
+                <h3 class="game-title" id="quiz-title">Mezuniyet Bilgi Yarışması</h3>
                 <div class="progress-container">
                     <div class="progress-bar" id="progress-bar"></div>
                 </div>
-                <p class="game-question" id="question-text">What university are we celebrating today?</p>
+                <p class="game-question" id="question-text">Siyahım var, beyazım var. Küçük bir ağacım var. Ailem kalabalık - bir dalda 100 kardeş.</p>
                 
                 <div class="game-input">
-                    <label for="guess" id="answer-label">Your answer:</label>
-                    <input type="text" id="guess" placeholder="Enter your answer">
-                    <button id="submit-btn">Submit Answer</button>
+                    <label for="guess" id="answer-label">Cevabınız:</label>
+                    <input type="text" id="guess" placeholder="">
+                    <button id="submit-btn">Cevabı Gönder</button>
                 </div>
                 
-                <p class="hint" id="hint-text">Hint: The university is located in Turkey</p>
+                <p class="hint" id="hint-text">İpucu: Salkımlar halinde büyür ve şarap yapılır</p>
                 
                 <div class="result" id="result"></div>
             </div>
@@ -842,15 +828,18 @@
         
         <!-- Next Button Container -->
         <div class="next-button-container">
-            <a href="https://ayaaba-fatawu-sumaila.github.io/rubyfath-advice/" class="next-btn">
+            <a href="https://ayaaba-fatawu-sumaila.github.io/rubyfath-advice/" class="next-btn" data-lang="en" style="display:none;">
                 Next
+            </a>
+            <a href="https://ayaaba-fatawu-sumaila.github.io/rubyfath-advice/" class="next-btn" data-lang="tr">
+                Sonraki
             </a>
         </div>
         
         <footer>
-            <p id="footer-text">© IKCU 2025 Tomer Graduation Ceremony | Congratulations Graduates!</p>
+            <p id="footer-text">© IKCU 2025 Tomer Mezuniyet Töreni | Tebrikler Mezunlar!</p>
             <div class="social-links">
-                <span id="connect-text">Connect with RUBYFATH:</span>
+                <span id="connect-text">RUBYFATH ile iletişim:</span>
                 <a href="https://wa.me/0905053783510" class="social-link whatsapp" target="_blank" aria-label="WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
@@ -868,14 +857,14 @@
     </div>
 
     <div class="score-display" id="score-display">
-        <span id="score-label">Score:</span> <span id="score">0</span>
+        <span id="score-label">Puan:</span> <span id="score">0</span>
     </div>
 
     <div class="music-control" id="music-control">
         <i class="fas fa-music"></i>
     </div>
     
-    <div class="music-info" id="music-info">Background music playing</div>
+    <div class="music-info" id="music-info">Arka plan müziği çalıyor</div>
     
     <audio id="background-music" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
@@ -1089,7 +1078,7 @@
                     ]
                 },
                 tr: {
-                    title: "Tomer 2025 Mezuniyeti",
+                    title: "İKÇÜ TÖMER 2025 Mezuniyeti",
                     subtitle: "Başarılarınızı Kutluyoruz",
                     quizTitle: "Mezuniyet Bilgi Yarışması",
                     answerLabel: "Cevabınız:",
@@ -1262,8 +1251,8 @@
             const gameState = {
                 score: 0,
                 currentQuestion: 0,
-                language: 'en',
-                questions: translations.en.questions,
+                language: 'tr',
+                questions: translations.tr.questions,
                 musicPlaying: false
             };
 
@@ -1281,6 +1270,7 @@
             const backgroundMusic = document.getElementById('background-music');
             const musicInfo = document.getElementById('music-info');
             const langButtons = document.querySelectorAll('.lang-btn');
+            const nextButtons = document.querySelectorAll('.next-btn');
             
             // Text elements
             const title = document.getElementById('title');
@@ -1333,7 +1323,7 @@
                 
                 const currentQ = gameState.questions[gameState.currentQuestion];
                 questionText.textContent = currentQ.question;
-                hintText.textContent = translations[gameState.language].questions[gameState.currentQuestion].hint;
+                hintText.textContent = currentQ.hint;
                 guessInput.value = '';
                 resultDiv.style.display = 'none';
                 
@@ -1348,7 +1338,7 @@
                 
                 // Validate input
                 if (!userGuess) {
-                    showResult(translations[gameState.language].submitBtn === "Submit Answer" ? 
+                    showResult(gameState.language === 'en' ? 
                         "Please enter an answer!" : "Lütfen bir cevap girin!", "error");
                     guessInput.classList.add('shake-animation');
                     setTimeout(() => {
@@ -1370,16 +1360,18 @@
                 
                 // Check the answer
                 if (isCorrect) {
-                    gameState.score += 4;
-                    showResult(`🎉 ${translations[gameState.language].submitBtn === "Submit Answer" ? 
-                        "Correct! The answer is" : "Doğru! Cevap"} ${currentQ.answer}. +4 ${translations[gameState.language].score === "Score:" ? "points!" : "puan!"}`, "success");
+                    gameState.score += 5;
+                    showResult(gameState.language === 'en' ? 
+                        `🎉 Correct! The answer is ${currentQ.answer}. +5 points!` : 
+                        `🎉 Doğru! Cevap ${currentQ.answer}. +5 puan!`, "success");
                     createConfetti();
                     createCelebrationEmoji('🌟', submitBtn);
                     createBalloons(5); // Add some balloons for correct answer
                     updateScore();
                 } else {
-                    showResult(`${translations[gameState.language].submitBtn === "Submit Answer" ? 
-                        "Incorrect. The correct answer is:" : "Yanlış. Doğru cevap:"} ${currentQ.answer}`, "error");
+                    showResult(gameState.language === 'en' ? 
+                        `Incorrect. The correct answer is: ${currentQ.answer}` : 
+                        `Yanlış. Doğru cevap: ${currentQ.answer}`, "error");
                 }
                 
                 // Move to next question after delay
@@ -1535,6 +1527,8 @@
                 } else {
                     backgroundMusic.play();
                     musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+                    musicInfo.textContent = gameState.language === 'en' ? 
+                        "Background music playing" : "Arka plan müziği çalıyor";
                     musicInfo.style.display = 'block';
                     gameState.musicPlaying = true;
                     
@@ -1574,6 +1568,15 @@
                     }
                 });
                 
+                // Update next buttons
+                nextButtons.forEach(btn => {
+                    if (btn.dataset.lang === lang) {
+                        btn.style.display = 'inline-flex';
+                    } else {
+                        btn.style.display = 'none';
+                    }
+                });
+                
                 // Reset game
                 updateScore();
                 loadQuestion();
@@ -1589,16 +1592,16 @@
                 
                 if (gameState.score <= 30) {
                     medalEmoji = '🥉';
-                    medalTitle = translations[gameState.language].score === "Score:" ? "Bronze Medal" : "Bronz Madalya";
+                    medalTitle = gameState.language === 'en' ? "Bronze Medal" : "Bronz Madalya";
                 } else if (gameState.score <= 50) {
                     medalEmoji = '🥈';
-                    medalTitle = translations[gameState.language].score === "Score:" ? "Silver Medal" : "Gümüş Madalya";
-                } else if (gameState.score <= 70) {
+                    medalTitle = gameState.language === 'en' ? "Silver Medal" : "Gümüş Madalya";
+                } else if (gameState.score <= 100) {
                     medalEmoji = '🥇';
-                    medalTitle = translations[gameState.language].score === "Score:" ? "Gold Medal" : "Altın Madalya";
+                    medalTitle = gameState.language === 'en' ? "Gold Medal" : "Altın Madalya";
                 } else {
                     medalEmoji = '🏆';
-                    medalTitle = translations[gameState.language].score === "Score:" ? "Platinum Trophy" : "Platin Kupa";
+                    medalTitle = gameState.language === 'en' ? "Platinum Trophy" : "Platin Kupa";
                 }
                 
                 // Create celebration message
@@ -1608,7 +1611,7 @@
                     <h3>${gameState.language === 'en' ? 'Congratulations!' : 'Tebrikler!'}</h3>
                     <div class="medal-display">${medalEmoji}</div>
                     <div class="medal-title">${medalTitle}</div>
-                    <p>${translations[gameState.language].score === "Score:" ? 'Your final score:' : 'Son puanınız:'} <strong>${gameState.score}/70</strong></p>
+                    <p>${gameState.language === 'en' ? 'Your final score:' : 'Son puanınız:'} <strong>${gameState.score}/150</strong></p>
                     <p>${gameState.language === 'en' ? 'You have earned this honor!' : 'Bu şerefi hak ettiniz!'}</p>
                     <button id="play-again">${gameState.language === 'en' ? 'Play Again' : 'Tekrar Oyna'}</button>
                 `;
@@ -1643,6 +1646,9 @@
                     loadQuestion();
                 });
             }
+            
+            // Set Turkish as default language
+            changeLanguage('tr');
         });
     </script>
 </body>
